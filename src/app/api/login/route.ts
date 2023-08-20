@@ -42,12 +42,26 @@ export async function GET(request: NextRequest) {
     return NextResponse.json({ isLogged: false }, { status: 401 });
   }
 
-  //Use Firebase Admin to validate the session cookie
-  const decodedClaims = await auth().verifySessionCookie(session, true);
+  try {
+    //Use Firebase Admin to validate the session cookie
+    const decodedClaims = await auth().verifySessionCookie(session, true);
 
-  if (!decodedClaims) {
+    const isTokenExpired = decodedClaims.exp <= new Date().getTime() / 1000;
+
+    if (isTokenExpired) {
+      throw new Error("Expired token");
+    }
+
+    return NextResponse.json({ isLogged: true }, { status: 200 });
+  } catch {
+    const options = {
+      name: "session",
+      value: "",
+      maxAge: -1,
+    };
+
+    cookies().set(options);
+
     return NextResponse.json({ isLogged: false }, { status: 401 });
   }
-
-  return NextResponse.json({ isLogged: true }, { status: 200 });
 }
