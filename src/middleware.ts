@@ -6,10 +6,10 @@ export async function middleware(request: NextRequest, response: NextResponse) {
   const nextUrlOrigin = request.nextUrl.clone().origin;
 
   if (!session) {
-    return NextResponse.redirect(new URL("/login", request.url));
+    return NextResponse.redirect(new URL("/", request.url));
   }
 
-  const responseAPI = await fetch(`${nextUrlOrigin}/api/login`, {
+  const responseAPI = await fetch(`/api/login`, {
     headers: {
       Cookie: `session=${session?.value}`,
     },
