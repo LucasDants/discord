@@ -9,7 +9,7 @@ export default function HomeLayout() {
   return (
     <main className="overflow-x-hidden">
       <Header />
-      <div className="flex flex-col  bg-gray-100 w-screen p-1  lg:px-72 ">
+      <div className="flex flex-col  bg-gray-100 w-screen p-1  lg:px-72 max-w-screen-2xl mx-auto">
         <HotelSearch />
         <PopularSearches />
         <About />
